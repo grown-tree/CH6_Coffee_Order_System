@@ -14,7 +14,7 @@ VALUES ('아메리카노', 3000, NOW(6)),
 -- 테스트용 사용자 데이터
 -- ============================================================
 
-INSERT INTO users (name, point, version, created_at, updated_at)
-VALUES ('홍길동', 10000, 0, NOW(6), NOW(6)),
-       ('김철수', 5000, 0, NOW(6), NOW(6)),
-       ('이영희', 0, 0, NOW(6), NOW(6));
+INSERT INTO users (name, point, created_at, updated_at)
+VALUES ('홍길동', 10000, NOW(6), NOW(6)),
+       ('김철수', 5000, NOW(6), NOW(6)),
+       ('이영희', 0, NOW(6), NOW(6));

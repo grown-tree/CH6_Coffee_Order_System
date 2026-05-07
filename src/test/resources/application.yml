@@ -2,42 +2,88 @@ spring:
   application:
     name: coffee_order_system
 
+  # ──────────────────────────────────────────
+  # DataSource (MySQL) - 테스트용
+  # ──────────────────────────────────────────
   datasource:
     url: jdbc:mysql://localhost:3306/coffee_order_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  # ──────────────────────────────────────────
+  # JPA / Hibernate
+  # ──────────────────────────────────────────
   jpa:
     hibernate:
-      ddl-auto: create-drop       # 테스트: create-drop
+      ddl-auto: validate
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
     open-in-view: false
 
+  # ──────────────────────────────────────────
+  # SQL 초기화 (schema.sql + data.sql)
+  # ──────────────────────────────────────────
   sql:
     init:
       mode: always
       schema-locations: classpath:sql/schema.sql
       data-locations: classpath:sql/data.sql
 
+  # ──────────────────────────────────────────
+  # Redis - 테스트용
+  # ──────────────────────────────────────────
   data:
     redis:
       host: localhost
       port: 6379
+      password:
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
 
+  # ──────────────────────────────────────────
+  # Kafka - 테스트용
+  # ──────────────────────────────────────────
   kafka:
     bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
     consumer:
-      group-id: coffee-order-group-test
+      group-id: coffee-order-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       auto-offset-reset: earliest
       properties:
         spring.json.trusted.packages: "*"
 
+# ──────────────────────────────────────────
+# 서버 설정
+# ──────────────────────────────────────────
+server:
+  port: 8080
+
+# ──────────────────────────────────────────
+# 로깅
+# ──────────────────────────────────────────
+logging:
+  level:
+    com.example.coffee_order_system: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+# ──────────────────────────────────────────
+# 커스텀 설정
+# ──────────────────────────────────────────
 app:
   popular-menu:
     top-count: 3

@@ -1,6 +1,7 @@
 package com.example.coffee_order_system.domain.order.event;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 public class OrderCompletedEvent {
     private final Long orderId;
     private final Long userId;

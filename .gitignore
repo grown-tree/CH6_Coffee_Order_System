@@ -1,5 +1,6 @@
 HELP.md
 requirements.md
+work-log-2026-05-07.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -36,3 +37,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Environment Variables ###
+.env
