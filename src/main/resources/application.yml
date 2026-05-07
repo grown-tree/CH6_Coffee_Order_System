@@ -1,0 +1,95 @@
+spring:
+  application:
+    name: coffee_order_system
+
+  # ──────────────────────────────────────────
+  # DataSource (MySQL)
+  # ──────────────────────────────────────────
+  datasource:
+    url: jdbc:mysql://localhost:3306/coffee_order_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # ──────────────────────────────────────────
+  # JPA / Hibernate
+  # ──────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: validate          # 운영환경: validate / 개발: create 또는 update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
+
+  # ──────────────────────────────────────────
+  # SQL 초기화 (schema.sql + data.sql)
+  # ──────────────────────────────────────────
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/schema.sql
+      data-locations: classpath:sql/data.sql
+
+  # ──────────────────────────────────────────
+  # Redis
+  # ──────────────────────────────────────────
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:                   # 비밀번호가 있을 경우 입력
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
+
+  # ──────────────────────────────────────────
+  # Kafka
+  # ──────────────────────────────────────────
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all                   # 모든 ISR 브로커에 ack → 메시지 유실 방지
+      retries: 3
+    consumer:
+      group-id: coffee-order-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+
+# ──────────────────────────────────────────
+# 서버 설정
+# ──────────────────────────────────────────
+server:
+  port: 8080
+
+# ──────────────────────────────────────────
+# 로깅
+# ──────────────────────────────────────────
+logging:
+  level:
+    com.example.coffee_order_system: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+# ──────────────────────────────────────────
+# 커스텀 설정
+# ──────────────────────────────────────────
+app:
+  popular-menu:
+    top-count: 3                  # 인기 메뉴 상위 N개
+    window-days: 7                # 집계 기간 (일)
+    cache-ttl-minutes: 5          # ZUNIONSTORE 결과 캐시 TTL
+    key-expire-days: 8            # 일별 ZSET 키 만료일 (window-days + 여유)
+  kafka:
+    topic:
+      order: order-events         # 주문 이벤트 토픽

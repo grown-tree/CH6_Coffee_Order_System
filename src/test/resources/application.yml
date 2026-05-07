@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: coffee_order_system
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/coffee_order_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop       # 테스트: create-drop
+    show-sql: true
+    open-in-view: false
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/schema.sql
+      data-locations: classpath:sql/data.sql
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: coffee-order-group-test
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+
+app:
+  popular-menu:
+    top-count: 3
+    window-days: 7
+    cache-ttl-minutes: 5
+    key-expire-days: 8
+  kafka:
+    topic:
+      order: order-events
