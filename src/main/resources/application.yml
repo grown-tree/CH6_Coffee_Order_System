@@ -17,7 +17,7 @@ spring:
   # ──────────────────────────────────────────
   jpa:
     hibernate:
-      ddl-auto: validate          # 운영환경: validate / 개발: create 또는 update
+      ddl-auto: none          # schema.sql로 직접 관리
     show-sql: true
     properties:
       hibernate:

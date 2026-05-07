@@ -2,7 +2,7 @@
 -- 초기 메뉴 데이터
 -- ============================================================
 
-INSERT INTO menus (name, price, created_at)
+INSERT IGNORE INTO menus (name, price, created_at)
 VALUES ('아메리카노', 3000, NOW(6)),
        ('카페라떼', 4500, NOW(6)),
        ('카푸치노', 4500, NOW(6)),

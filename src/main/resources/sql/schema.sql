@@ -2,7 +2,12 @@
 -- coffee_order_system DDL
 -- ============================================================
 
-CREATE TABLE IF NOT EXISTS users
+-- FK 순서 고려: orders → users → menus
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS menus;
+
+CREATE TABLE users
 (
     id         BIGINT       NOT NULL AUTO_INCREMENT,
     name       VARCHAR(100) NOT NULL,
@@ -13,7 +18,7 @@ CREATE TABLE IF NOT EXISTS users
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS menus
+CREATE TABLE menus
 (
     id         BIGINT         NOT NULL AUTO_INCREMENT,
     name       VARCHAR(100)   NOT NULL,
@@ -23,7 +28,7 @@ CREATE TABLE IF NOT EXISTS menus
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS orders
+CREATE TABLE orders
 (
     id         BIGINT       NOT NULL AUTO_INCREMENT,
     user_id    BIGINT       NOT NULL,
