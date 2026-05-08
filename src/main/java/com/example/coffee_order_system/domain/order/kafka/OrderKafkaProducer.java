@@ -25,8 +25,8 @@ public class OrderKafkaProducer {
      * 별도의 스레드(@Async)에서 Kafka 전송을 수행.
      * 이를 통해 Kafka 지연이 클라이언트 응답이나 트랜잭션 롤백에 영향을 주지 않음.
      */
-    @Async("kafkaAsyncExecutor")
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Async("kafkaAsyncExecutor")//별도 스레드풀에서 실행하여 http응답속도 일정하게 유지
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)//주문 트랜잭션이 완전히 커밋된 후에만 실행
     public void sendOrderEvent(OrderCompletedEvent event) {
         log.info("[Kafka Producer] 주문 이벤트 전송 시작 - orderId: {}", event.getOrderId());
         
